@@ -57,10 +57,14 @@ pipeline {
             GIT_REPO_NAME = "Jenkins-Zero-To-Hero"
             GIT_USER_NAME = "davidnithil"
         }
-        steps {
-            checkout scm
+        steps {     
             withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
                 sh '''
+                    # Remove old workspace if exists
+                    rm -rf Jenkins-Zero-To-Hero
+                    # Full clone of repo inside workspace
+                    git clone https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME}.git
+                    cd ${GIT_REPO_NAME}
                     git config user.email "rockynithil@gmail.com"
                     git config user.name "David Nithil Kumar Selvaraj"
                     BUILD_NUMBER=${BUILD_NUMBER}
